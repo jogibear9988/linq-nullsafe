@@ -1,0 +1,4 @@
+linq-nullsafe
+=============
+
+LINQ Nullsafe
