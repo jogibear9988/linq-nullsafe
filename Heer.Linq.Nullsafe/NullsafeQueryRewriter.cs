@@ -7,8 +7,12 @@ namespace Heer.Linq.Nullsafe
     /// <summary>
     /// Expression visitor for making member access nullsafe.
     /// </summary>
-    internal class NullsafeQueryRewriter : ExpressionVisitor
+    /// <remarks>
+    /// Use <see cref="NullsafeQueryBuilder" /> to make a query nullsafe.
+    /// </remarks>
+    public class NullsafeQueryRewriter : ExpressionVisitor
     {
+        /// <inheritdoc />
         protected override Expression VisitMember(MemberExpression node)
         {
             if (node == null || node.Expression == null)
@@ -51,8 +55,6 @@ namespace Heer.Linq.Nullsafe
 
             // default value
             return Expression.Default(type);
-
-            // TODO: maybe some nice fallback registration or the like
         }
     }
 }

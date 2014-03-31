@@ -41,11 +41,12 @@
     </CodeAnalysisDictionary>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Nullsafe.cs" />
-    <Compile Include="NullsafeQuery.cs" />
-    <Compile Include="NullsafeQueryProvider.cs" />
+    <Compile Include="NullsafeQueryBuilder.cs" />
     <Compile Include="NullsafeQueryRewriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RewriteQuery.cs" />
+    <Compile Include="RewriteQueryBuilder.cs" />
+    <Compile Include="RewriteQueryProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
