@@ -34,11 +34,12 @@ namespace Heer.Linq.Nullsafe
             elementType = query.ElementType;
             expression = query.Expression;
 
-            // replace query provider
+            // replace query provider for further chaining
             provider = new RewriteQueryProvider(query.Provider, rewriter);
 
+            // rewrite on enumeration
             enumerable = new Lazy<IEnumerable>(() =>
-                Provider.Execute<IEnumerable>(Expression));
+                query.Provider.CreateQuery(rewriter.Visit(query.Expression)));
         }
 
         /// <inheritdoc />
@@ -89,8 +90,9 @@ namespace Heer.Linq.Nullsafe
         public RewriteQuery(IQueryable<T> query, ExpressionVisitor rewriter)
             : base(query, rewriter)
         {
+            // rewrite on enumeration
             enumerable = new Lazy<IEnumerable<T>>(() =>
-                Provider.Execute<IEnumerable<T>>(Expression));
+                query.Provider.CreateQuery<T>(rewriter.Visit(query.Expression)));
         }
 
         /// <inheritdoc />
