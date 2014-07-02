@@ -12,7 +12,7 @@ namespace Heer.Linq.Nullsafe
     /// </summary>
     [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface")]
-    public class RewriteQuery : IQueryable
+    public abstract class RewriteQuery : IOrderedQueryable
     {
         private readonly Type elementType;
         private readonly Expression expression;
@@ -43,34 +43,27 @@ namespace Heer.Linq.Nullsafe
         }
 
         /// <inheritdoc />
-        public Type ElementType { get { return elementType; } }
-        /// <inheritdoc />
-        public Expression Expression { get { return expression; } }
-        /// <inheritdoc />
-        public IQueryProvider Provider { get { return provider; } }
-
-        /// <inheritdoc />
-        public IEnumerator GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return enumerable.Value.GetEnumerator();
         }
-    }
 
-    /// <summary>
-    /// Proxy for rewritten queries.
-    /// </summary>
-    [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-    [SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface")]
-    public class RewriteOrderedQuery : RewriteQuery, IOrderedQueryable
-    {
-        /// <summary>
-        /// Create a new query to rewrite.
-        /// </summary>
-        /// <param name="query">The actual query.</param>
-        /// <param name="rewriter">The rewriter to rewrite the query.</param>
-        public RewriteOrderedQuery(IOrderedQueryable query, ExpressionVisitor rewriter)
-            : base(query, rewriter)
+        /// <inheritdoc />
+        Type IQueryable.ElementType
         {
+            get { return elementType; }
+        }
+
+        /// <inheritdoc />
+        Expression IQueryable.Expression
+        {
+            get { return expression; }
+        }
+
+        /// <inheritdoc />
+        IQueryProvider IQueryable.Provider
+        {
+            get { return provider; }
         }
     }
 
@@ -78,7 +71,7 @@ namespace Heer.Linq.Nullsafe
     /// Proxy for rewritten queries.
     /// </summary>
     [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-    public class RewriteQuery<T> : RewriteQuery, IQueryable<T>
+    public class RewriteQuery<T> : RewriteQuery, IOrderedQueryable<T>
     {
         private readonly Lazy<IEnumerable<T>> enumerable;
 
@@ -96,26 +89,9 @@ namespace Heer.Linq.Nullsafe
         }
 
         /// <inheritdoc />
-        public new IEnumerator<T> GetEnumerator()
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             return enumerable.Value.GetEnumerator();
-        }
-    }
-
-    /// <summary>
-    /// Proxy for rewritten queries.
-    /// </summary>
-    [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-    public class RewriteOrderedQuery<T> : RewriteQuery<T>, IOrderedQueryable<T>
-    {
-        /// <summary>
-        /// Create a new query to rewrite.
-        /// </summary>
-        /// <param name="query">The actual query.</param>
-        /// <param name="rewriter">The rewriter to rewrite the query.</param>
-        public RewriteOrderedQuery(IOrderedQueryable<T> query, ExpressionVisitor rewriter)
-            : base(query, rewriter)
-        {
         }
     }
 }

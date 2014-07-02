@@ -25,11 +25,9 @@ namespace Heer.Linq.Nullsafe
             if (rewriter == null)
                 throw new ArgumentNullException("rewriter");
 
-            var ordered = value as IOrderedQueryable;
-            if (ordered != null)
-                return new RewriteOrderedQuery(ordered, rewriter);
-
-            return new RewriteQuery(value, rewriter);
+            return (IQueryable)Activator.CreateInstance(
+                typeof(RewriteQuery<>).MakeGenericType(value.ElementType),
+                value, rewriter);
         }
 
         /// <summary>
@@ -45,7 +43,9 @@ namespace Heer.Linq.Nullsafe
             if (rewriter == null)
                 throw new ArgumentNullException("rewriter");
 
-            return new RewriteOrderedQuery(value, rewriter);
+            return (IOrderedQueryable)Activator.CreateInstance(
+                typeof(RewriteQuery<>).MakeGenericType(value.ElementType),
+                value, rewriter);
         }
 
         /// <summary>
@@ -61,10 +61,6 @@ namespace Heer.Linq.Nullsafe
                 throw new ArgumentNullException("value");
             if (rewriter == null)
                 throw new ArgumentNullException("rewriter");
-
-            var ordered = value as IOrderedQueryable<T>;
-            if (ordered != null)
-                return new RewriteOrderedQuery<T>(ordered, rewriter);
 
             return new RewriteQuery<T>(value, rewriter);
         }
@@ -83,7 +79,7 @@ namespace Heer.Linq.Nullsafe
             if (rewriter == null)
                 throw new ArgumentNullException("rewriter");
 
-            return new RewriteOrderedQuery<T>(value, rewriter);
+            return new RewriteQuery<T>(value, rewriter);
         }
     }
 }
