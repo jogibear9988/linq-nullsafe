@@ -24,7 +24,7 @@ namespace Heer.Linq.Nullsafe
         /// </summary>
         /// <param name="query">The actual query.</param>
         /// <param name="rewriter">The rewriter to rewrite the query.</param>
-        public RewriteQuery(IQueryable query, ExpressionVisitor rewriter)
+        protected RewriteQuery(IQueryable query, ExpressionVisitor rewriter)
         {
             if (query == null)
                 throw new ArgumentNullException("query");
@@ -43,25 +43,25 @@ namespace Heer.Linq.Nullsafe
         }
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
+        public IEnumerator GetEnumerator()
         {
             return enumerable.Value.GetEnumerator();
         }
 
         /// <inheritdoc />
-        Type IQueryable.ElementType
+        public Type ElementType
         {
             get { return elementType; }
         }
 
         /// <inheritdoc />
-        Expression IQueryable.Expression
+        public Expression Expression
         {
             get { return expression; }
         }
 
         /// <inheritdoc />
-        IQueryProvider IQueryable.Provider
+        public IQueryProvider Provider
         {
             get { return provider; }
         }
@@ -89,7 +89,7 @@ namespace Heer.Linq.Nullsafe
         }
 
         /// <inheritdoc />
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        public new IEnumerator<T> GetEnumerator()
         {
             return enumerable.Value.GetEnumerator();
         }
